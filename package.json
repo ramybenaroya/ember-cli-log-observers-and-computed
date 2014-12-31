@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-log-observers-and-computed",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -11,6 +11,7 @@
     "test": "ember test"
   },
   "repository": "https://github.com/ramybenaroya/ember-cli-log-observers-and-computed",
+  "homepage": "http://ramybenaroya.github.io/ember-cli-log-observers-and-computed",
   "engines": {
     "node": ">= 0.10.0"
   },
