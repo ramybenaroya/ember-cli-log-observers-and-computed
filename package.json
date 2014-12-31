@@ -10,11 +10,11 @@
     "build": "ember build",
     "test": "ember test"
   },
-  "repository": "https://github.com/stefanpenner/ember-cli",
+  "repository": "https://github.com/ramybenaroya/ember-cli-log-observers-and-computed",
   "engines": {
     "node": ">= 0.10.0"
   },
-  "author": "",
+  "author": "Ramy Ben Aroya",
   "license": "MIT",
   "devDependencies": {
     "body-parser": "^1.2.0",
