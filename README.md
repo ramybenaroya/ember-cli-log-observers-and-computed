@@ -1,6 +1,15 @@
 # Ember-cli-log-observers-and-computed
 
-This README outlines the details of collaborating on this Ember addon.
+Debug Ember observers and computed properties
+
+## Usage
+
+`npm install --save ember-cli-log-observers-and-computed`  
+
+In order to see the debug messages add the following code to your `app.js`:  
+`Ember.LOG_OBSERVERS = true;`  
+`Ember.LOG_COMPUTED_PROPERTIES = true;`
+
 
 ## Installation
 

@@ -4,7 +4,8 @@ import loadInitializers from 'ember/load-initializers';
 import config from './config/environment';
 
 Ember.MODEL_FACTORY_INJECTIONS = true;
-
+Ember.LOG_OBSERVERS = true;
+Ember.LOG_COMPUTED_PROPERTIES = true;
 var App = Ember.Application.extend({
   modulePrefix: config.modulePrefix,
   podModulePrefix: config.podModulePrefix,
