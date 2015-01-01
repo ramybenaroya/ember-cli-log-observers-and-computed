@@ -100,8 +100,8 @@
   ["exports"],
   function(__exports__) {
     "use strict";
-    __exports__["default"] = { "application.js":"import Ember from 'ember';\nexport default Ember.Controller.extend({\n\taComputedProperty: function(){\n\t\treturn this.get('counter');\n\t}.property('counter', 'some3', 'some1', 'some2'),\n\tanObserver: function(){\n\t\tvar aComputedProperty = this.get('aComputedProperty');\n\t\tthis.set('output', aComputedProperty);\n\t}.observes('counter', 'some1'),\n\tinit: function(){\n\t\tthis._super();\n\t\tsetInterval(Ember.run.bind(this, this.incrementProperty, 'counter'), 500);\n\t},\n\tcounter: 0,\n\toutput: null\n});",
-      ".gitkeep":"" };
+    __exports__["default"] = { ".gitkeep":"",
+      "application.js":"import Ember from 'ember';\nexport default Ember.Controller.extend({\n\taComputedProperty: function(){\n\t\treturn this.get('counter');\n\t}.property('counter'),\n\tanObserver: function(){\n\t\tvar aComputedProperty = this.get('aComputedProperty');\n\t\tthis.set('output', aComputedProperty);\n\t}.observes('counter'),\n\tinit: function(){\n\t\tthis._super();\n\t\tsetInterval(Ember.run.bind(this, this.incrementProperty, 'counter'), 500);\n\t},\n\tcounter: 0,\n\toutput: null\n});" };
   });
 ;define("dummy/controllers/application", 
   ["ember","exports"],
@@ -111,11 +111,11 @@
     __exports__["default"] = Ember.Controller.extend({
     	aComputedProperty: function(){
     		return this.get('counter');
-    	}.property('counter', 'some3', 'some1', 'some2'),
+    	}.property('counter'),
     	anObserver: function(){
     		var aComputedProperty = this.get('aComputedProperty');
     		this.set('output', aComputedProperty);
-    	}.observes('counter', 'some1'),
+    	}.observes('counter'),
     	init: function(){
     		this._super();
     		setInterval(Ember.run.bind(this, this.incrementProperty, 'counter'), 500);
