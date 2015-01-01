@@ -2,9 +2,10 @@
 
 Log Ember Object's observers and computed properties
 
+Thanks to [@liady](https://github.com/liady) for writing the stack trace code.
 ## Usage
 
-`npm install --save ember-cli-log-observers-and-computed`  
+`npm install --save-dev ember-cli-log-observers-and-computed`  
 
 In order to see the log messages add the following code to your `app.js`:  
 `Ember.LOG_OBSERVERS = true;`  

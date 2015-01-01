@@ -3,7 +3,8 @@
 var EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 
 var app = new EmberAddon({
-	  snippetPaths: ['tests/dummy/app/controllers']
+	  snippetPaths: ['tests/dummy/app/controllers'],
+	  wrapInEval: false
 });
 
 // Use `app.import` to add additional libraries to the generated
