@@ -1,5 +1,6 @@
 export {
     applyAOP,
+    formatArgs,
     getCleanStackTrace,
     getStackTrace
 };
@@ -14,16 +15,33 @@ function applyAOP(targetFunction, doBefore) {
         var self = this;
         var stackTrace = getStackTrace();
         var func = function() {
-            doBefore.call(null, stackTrace);
+            doBefore.call(null, stackTrace, args);
             var length = arguments.length;
-            var args = new Array(length);
+            var funcArgs = new Array(length);
             for (var x = 0; x < length; x++) {
-                args[x] = arguments[x];
+                funcArgs[x] = arguments[x];
             }
-            return self.apply(this, args);
+            return self.apply(this, funcArgs);
         };
         return targetFunction.apply(func, args);
     };
+}
+
+function formatArgs(prefix, args) {
+    var ret = '',
+        quotedArgs = args.map(function(arg) {
+            return '"' + arg + '"';
+        }),
+        length = quotedArgs.length;
+    if (quotedArgs.length === 1) {
+        ret = prefix + quotedArgs[0];
+    } else if (length === 2) {
+        ret += prefix + quotedArgs[0] + ' and ' + quotedArgs[1];
+    } else if (length > 2) {
+        ret = quotedArgs.slice(0, length - 2).join(', ');
+        ret = prefix + ret.trim() + ', ' + quotedArgs[length - 2] + ' and ' + quotedArgs[length - 1];
+    }
+    return ret;
 }
 
 function getCleanStackTrace() {
