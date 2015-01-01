@@ -1,55 +1,395 @@
-eval("//# sourceURL=vendor/ember-cli/loader.js");
 
-;eval("define(\"dummy/Code Snippet Ember Component/tests/code-snippet-ember-component/utils.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - code-snippet-ember-component\');\n    test(\'code-snippet-ember-component/utils.js should pass jshint\', function() { \n      ok(true, \'code-snippet-ember-component/utils.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/Code Snippet Ember Component/tests/code-snippet-ember-component/utils.jshint.js");
+;define("dummy/Code Snippet Ember Component/tests/code-snippet-ember-component/utils.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - code-snippet-ember-component');
+    test('code-snippet-ember-component/utils.js should pass jshint', function() { 
+      ok(true, 'code-snippet-ember-component/utils.js should pass jshint.'); 
+    });
+  });
+;define("dummy/Ember CLI QUnit/tests/ember-cli-qunit/utils.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-qunit');
+    test('ember-cli-qunit/utils.js should pass jshint', function() { 
+      ok(true, 'ember-cli-qunit/utils.js should pass jshint.'); 
+    });
+  });
+;define("dummy/app", 
+  ["ember","ember/resolver","ember/load-initializers","dummy/config/environment","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    var Resolver = __dependency2__["default"];
+    var loadInitializers = __dependency3__["default"];
+    var config = __dependency4__["default"];
 
-;eval("define(\"dummy/Ember CLI QUnit/tests/ember-cli-qunit/utils.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-cli-qunit\');\n    test(\'ember-cli-qunit/utils.js should pass jshint\', function() { \n      ok(true, \'ember-cli-qunit/utils.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/Ember CLI QUnit/tests/ember-cli-qunit/utils.jshint.js");
+    Ember.MODEL_FACTORY_INJECTIONS = true;
+    Ember.LOG_OBSERVERS = true;
+    Ember.LOG_COMPUTED_PROPERTIES = true;
+    var App = Ember.Application.extend({
+      modulePrefix: config.modulePrefix,
+      podModulePrefix: config.podModulePrefix,
+      Resolver: Resolver
+    });
 
-;eval("define(\"dummy/app\", \n  [\"ember\",\"ember/resolver\",\"ember/load-initializers\",\"dummy/config/environment\",\"exports\"],\n  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    var Resolver = __dependency2__[\"default\"];\n    var loadInitializers = __dependency3__[\"default\"];\n    var config = __dependency4__[\"default\"];\n\n    Ember.MODEL_FACTORY_INJECTIONS = true;\n    Ember.LOG_OBSERVERS = true;\n    Ember.LOG_COMPUTED_PROPERTIES = true;\n    var App = Ember.Application.extend({\n      modulePrefix: config.modulePrefix,\n      podModulePrefix: config.podModulePrefix,\n      Resolver: Resolver\n    });\n\n    loadInitializers(App, config.modulePrefix);\n\n    __exports__[\"default\"] = App;\n  });//# sourceURL=dummy/app.js");
+    loadInitializers(App, config.modulePrefix);
 
-;eval("define(\"dummy/components/code-snippet\", \n  [\"ember\",\"dummy/snippets\",\"exports\"],\n  function(__dependency1__, __dependency2__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    var Snippets = __dependency2__[\"default\"];\n\n    /* global require */\n    var Highlight = require(\'highlight.js\');\n\n    __exports__[\"default\"] = Ember.Component.extend({\n      tagName: \'pre\',\n      classNameBindings: [\'language\'],\n      unindent: true,\n\n      _unindent: function(src) {\n        if (!this.get(\'unindent\')) {\n          return src;\n        }\n        var match, min, lines = src.split(\"\\n\");\n        for (var i = 0; i < lines.length; i++) {\n          match = /^\\s*/.exec(lines[i]);\n          if (match && (typeof min === \'undefined\' || min > match[0].length)) {\n            min = match[0].length;\n          }\n        }\n        if (typeof min !== \'undefined\' && min > 0) {\n          src = src.replace(new RegExp(\"(\\\\n|^)\\\\s{\" + min + \"}\", \'g\'), \"$1\");\n        }\n        return src;\n      },\n\n      source: function(){\n        return this._unindent(\n          (Snippets[this.get(\'name\')] || \"\")\n            .replace(/^(\\s*\\n)*/, \'\')\n            .replace(/\\s*$/, \'\')\n        );\n      }.property(\'name\'),\n\n      didInsertElement: function(){\n        Highlight.highlightBlock(this.get(\'element\'));\n      },\n\n      language: function(){\n        var m = /\\.(\\w+)$/i.exec(this.get(\'name\'));\n        if (m) {\n          switch (m[1].toLowerCase()) {\n          case \'js\':\n            return \'javascript\';\n          case \'hbs\':\n            return \'handlebars\';\n          }\n        }\n      }.property(\'name\')\n    });\n  });//# sourceURL=dummy/components/code-snippet.js");
+    __exports__["default"] = App;
+  });
+;define("dummy/components/code-snippet", 
+  ["ember","dummy/snippets","exports"],
+  function(__dependency1__, __dependency2__, __exports__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    var Snippets = __dependency2__["default"];
 
-;eval("define(\"dummy/snippets\", \n  [\"exports\"],\n  function(__exports__) {\n    \"use strict\";\n    __exports__[\"default\"] = { \".gitkeep\":\"\",\n      \"application.js\":\"import Ember from \'ember\';\\nexport default Ember.Controller.extend({\\n\\taComputedProperty: function(){\\n\\t\\treturn this.get(\'counter\');\\n\\t}.property(\'counter\'),\\n\\tanObserver: function(){\\n\\t\\tvar aComputedProperty = this.get(\'aComputedProperty\');\\n\\t\\tthis.set(\'output\', aComputedProperty);\\n\\t}.observes(\'counter\'),\\n\\tinit: function(){\\n\\t\\tthis._super();\\n\\t\\tsetInterval(Ember.run.bind(this, this.incrementProperty, \'counter\'), 100);\\n\\t},\\n\\tcounter: 0,\\n\\toutput: null\\n});\" };\n  });//# sourceURL=dummy/snippets.js");
+    /* global require */
+    var Highlight = require('highlight.js');
 
-;eval("define(\"dummy/controllers/application\", \n  [\"ember\",\"exports\"],\n  function(__dependency1__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    __exports__[\"default\"] = Ember.Controller.extend({\n    	aComputedProperty: function(){\n    		return this.get(\'counter\');\n    	}.property(\'counter\'),\n    	anObserver: function(){\n    		var aComputedProperty = this.get(\'aComputedProperty\');\n    		this.set(\'output\', aComputedProperty);\n    	}.observes(\'counter\'),\n    	init: function(){\n    		this._super();\n    		setInterval(Ember.run.bind(this, this.incrementProperty, \'counter\'), 100);\n    	},\n    	counter: 0,\n    	output: null\n    });\n  });//# sourceURL=dummy/controllers/application.js");
+    __exports__["default"] = Ember.Component.extend({
+      tagName: 'pre',
+      classNameBindings: ['language'],
+      unindent: true,
 
-;eval("define(\"dummy/ember-cli-content-security-policy/tests/ember-cli-content-security-policy/utils.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-cli-content-security-policy\');\n    test(\'ember-cli-content-security-policy/utils.js should pass jshint\', function() { \n      ok(true, \'ember-cli-content-security-policy/utils.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/ember-cli-content-security-policy/tests/ember-cli-content-security-policy/utils.jshint.js");
+      _unindent: function(src) {
+        if (!this.get('unindent')) {
+          return src;
+        }
+        var match, min, lines = src.split("\n");
+        for (var i = 0; i < lines.length; i++) {
+          match = /^\s*/.exec(lines[i]);
+          if (match && (typeof min === 'undefined' || min > match[0].length)) {
+            min = match[0].length;
+          }
+        }
+        if (typeof min !== 'undefined' && min > 0) {
+          src = src.replace(new RegExp("(\\n|^)\\s{" + min + "}", 'g'), "$1");
+        }
+        return src;
+      },
 
-;eval("define(\"dummy/ember-cli-log-observers-and-computed/tests/ember-cli-log-observers-and-computed/utils.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-cli-log-observers-and-computed\');\n    test(\'ember-cli-log-observers-and-computed/utils.js should pass jshint\', function() { \n      ok(true, \'ember-cli-log-observers-and-computed/utils.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/ember-cli-log-observers-and-computed/tests/ember-cli-log-observers-and-computed/utils.jshint.js");
+      source: function(){
+        return this._unindent(
+          (Snippets[this.get('name')] || "")
+            .replace(/^(\s*\n)*/, '')
+            .replace(/\s*$/, '')
+        );
+      }.property('name'),
 
-;eval("define(\"dummy/ember-data/tests/ember-data/utils.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-data\');\n    test(\'ember-data/utils.js should pass jshint\', function() { \n      ok(true, \'ember-data/utils.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/ember-data/tests/ember-data/utils.jshint.js");
+      didInsertElement: function(){
+        Highlight.highlightBlock(this.get('element'));
+      },
 
-;eval("define(\"dummy/ember-export-application-global/tests/ember-export-application-global/utils.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-export-application-global\');\n    test(\'ember-export-application-global/utils.js should pass jshint\', function() { \n      ok(true, \'ember-export-application-global/utils.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/ember-export-application-global/tests/ember-export-application-global/utils.jshint.js");
+      language: function(){
+        var m = /\.(\w+)$/i.exec(this.get('name'));
+        if (m) {
+          switch (m[1].toLowerCase()) {
+          case 'js':
+            return 'javascript';
+          case 'hbs':
+            return 'handlebars';
+          }
+        }
+      }.property('name')
+    });
+  });
+;define("dummy/snippets", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    __exports__["default"] = { "application.js":"import Ember from 'ember';\nexport default Ember.Controller.extend({\n\taComputedProperty: function(){\n\t\treturn this.get('counter');\n\t}.property('counter', 'some3', 'some1', 'some2'),\n\tanObserver: function(){\n\t\tvar aComputedProperty = this.get('aComputedProperty');\n\t\tthis.set('output', aComputedProperty);\n\t}.observes('counter', 'some1'),\n\tinit: function(){\n\t\tthis._super();\n\t\tsetInterval(Ember.run.bind(this, this.incrementProperty, 'counter'), 500);\n\t},\n\tcounter: 0,\n\toutput: null\n});",
+      ".gitkeep":"" };
+  });
+;define("dummy/controllers/application", 
+  ["ember","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    __exports__["default"] = Ember.Controller.extend({
+    	aComputedProperty: function(){
+    		return this.get('counter');
+    	}.property('counter', 'some3', 'some1', 'some2'),
+    	anObserver: function(){
+    		var aComputedProperty = this.get('aComputedProperty');
+    		this.set('output', aComputedProperty);
+    	}.observes('counter', 'some1'),
+    	init: function(){
+    		this._super();
+    		setInterval(Ember.run.bind(this, this.incrementProperty, 'counter'), 500);
+    	},
+    	counter: 0,
+    	output: null
+    });
+  });
+;define("dummy/ember-cli-content-security-policy/tests/ember-cli-content-security-policy/utils.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-content-security-policy');
+    test('ember-cli-content-security-policy/utils.js should pass jshint', function() { 
+      ok(true, 'ember-cli-content-security-policy/utils.js should pass jshint.'); 
+    });
+  });
+;define("dummy/ember-cli-log-observers-and-computed/tests/ember-cli-log-observers-and-computed/utils.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-log-observers-and-computed');
+    test('ember-cli-log-observers-and-computed/utils.js should pass jshint', function() { 
+      ok(true, 'ember-cli-log-observers-and-computed/utils.js should pass jshint.'); 
+    });
+  });
+;define("dummy/ember-data/tests/ember-data/utils.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-data');
+    test('ember-data/utils.js should pass jshint', function() { 
+      ok(true, 'ember-data/utils.js should pass jshint.'); 
+    });
+  });
+;define("dummy/ember-export-application-global/tests/ember-export-application-global/utils.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-export-application-global');
+    test('ember-export-application-global/utils.js should pass jshint', function() { 
+      ok(true, 'ember-export-application-global/utils.js should pass jshint.'); 
+    });
+  });
+;define("dummy/initializers/export-application-global", 
+  ["ember","dummy/config/environment","exports"],
+  function(__dependency1__, __dependency2__, __exports__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    var config = __dependency2__["default"];
 
-;eval("define(\"dummy/initializers/export-application-global\", \n  [\"ember\",\"dummy/config/environment\",\"exports\"],\n  function(__dependency1__, __dependency2__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    var config = __dependency2__[\"default\"];\n\n    function initialize(container, application) {\n      var classifiedName = Ember.String.classify(config.modulePrefix);\n\n      if (config.exportApplicationGlobal) {\n        window[classifiedName] = application;\n      }\n    };\n    __exports__.initialize = initialize;\n    __exports__[\"default\"] = {\n      name: \'export-application-global\',\n\n      initialize: initialize\n    };\n  });//# sourceURL=dummy/initializers/export-application-global.js");
+    function initialize(container, application) {
+      var classifiedName = Ember.String.classify(config.modulePrefix);
 
-;eval("define(\"dummy/initializers/intercept-prototype-functions\", \n  [\"ember-cli-log-observers-and-computed/utils\",\"exports\"],\n  function(__dependency1__, __exports__) {\n    \"use strict\";\n    var applyAOP = __dependency1__.applyAOP;\n    __exports__[\"default\"] = {\n    	before: \'domTemplates\',\n    	name: \'intercept-prototype-functions\',\n    	initialize: function() {\n    		if (Ember.LOG_OBSERVERS && Function.prototype.observes) {\n    			Function.prototype.observes = applyAOP(Function.prototype.observes, function(stackTrace) {\n    				Ember.debug(\'Inside an observer\');\n    				Ember.debug(\'called \' + stackTrace.stack[1]);\n    			});\n    		}\n    		if (Ember.LOG_COMPUTED_PROPERTIES && Function.prototype.property) {\n    			Function.prototype.property = applyAOP(Function.prototype.property, function(stackTrace) {\n    				Ember.debug(\'Inside a computed property\');\n    				Ember.debug(\'called \' + stackTrace.stack[1]);\n    			});\n    		}\n    	}\n    }\n  });//# sourceURL=dummy/initializers/intercept-prototype-functions.js");
+      if (config.exportApplicationGlobal) {
+        window[classifiedName] = application;
+      }
+    };
+    __exports__.initialize = initialize;
+    __exports__["default"] = {
+      name: 'export-application-global',
 
-;eval("define(\"dummy/live-reload-middleware/tests/live-reload-middleware/utils.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - live-reload-middleware\');\n    test(\'live-reload-middleware/utils.js should pass jshint\', function() { \n      ok(true, \'live-reload-middleware/utils.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/live-reload-middleware/tests/live-reload-middleware/utils.jshint.js");
+      initialize: initialize
+    };
+  });
+;define("dummy/initializers/intercept-prototype-functions", 
+  ["ember-cli-log-observers-and-computed/utils","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var applyAOP = __dependency1__.applyAOP;
+    var formatArgs = __dependency1__.formatArgs;
+    __exports__["default"] = {
+    	before: 'domTemplates',
+    	name: 'intercept-prototype-functions',
+    	initialize: function() {
+    		if (Ember.LOG_OBSERVERS && Function.prototype.observes) {
+    			Function.prototype.observes = applyAOP(Function.prototype.observes, function(stackTrace, args) {
+    				Ember.debug('Inside an observer' + formatArgs(', which observes ', args) + '.');
+    				Ember.debug('called ' + stackTrace.stack[1].trim() + ' Timestamp: ' + new Date().getTime());
+    			});
+    		}
+    		if (Ember.LOG_COMPUTED_PROPERTIES && Function.prototype.property) {
+    			Function.prototype.property = applyAOP(Function.prototype.property, function(stackTrace, args) {
+    				Ember.debug('Inside a computed property' + formatArgs(', which depends on ', args) + '.');
+    				Ember.debug('called ' + stackTrace.stack[1].trim() + ' Timestamp: ' + new Date().getTime());
+    			});
+    		}
+    	}
+    }
+  });
+;define("dummy/live-reload-middleware/tests/live-reload-middleware/utils.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - live-reload-middleware');
+    test('live-reload-middleware/utils.js should pass jshint', function() { 
+      ok(true, 'live-reload-middleware/utils.js should pass jshint.'); 
+    });
+  });
+;define("dummy/router", 
+  ["ember","dummy/config/environment","exports"],
+  function(__dependency1__, __dependency2__, __exports__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    var config = __dependency2__["default"];
 
-;eval("define(\"dummy/router\", \n  [\"ember\",\"dummy/config/environment\",\"exports\"],\n  function(__dependency1__, __dependency2__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    var config = __dependency2__[\"default\"];\n\n    var Router = Ember.Router.extend({\n      location: config.locationType\n    });\n\n    Router.map(function() {\n    });\n\n    __exports__[\"default\"] = Router;\n  });//# sourceURL=dummy/router.js");
+    var Router = Ember.Router.extend({
+      location: config.locationType
+    });
 
-;eval("define(\"dummy/templates/application\", \n  [\"ember\",\"exports\"],\n  function(__dependency1__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    __exports__[\"default\"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {\n    this.compilerInfo = [4,\'>= 1.0.0\'];\n    helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};\n      var buffer = \'\', stack1, helper, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;\n\n\n      data.buffer.push(\"<div class=\\\"github-fork-ribbon-wrapper right\\\">\\n    <div class=\\\"github-fork-ribbon\\\">\\n        <a href=\\\"https://github.com/ramybenaroya/ember-cli-log-observers-and-computed\\\">Fork me on GitHub</a>\\n    </div>\\n</div>\\n<h1>Ember-cli-log-observers-and-computed Example</h1>\\n\");\n      data.buffer.push(escapeExpression((helper = helpers[\'code-snippet\'] || (depth0 && depth0[\'code-snippet\']),options={hash:{\n        \'name\': (\"application.js\")\n      },hashTypes:{\'name\': \"STRING\"},hashContexts:{\'name\': depth0},contexts:[],types:[],data:data},helper ? helper.call(depth0, options) : helperMissing.call(depth0, \"code-snippet\", options))));\n      data.buffer.push(\"\\nOutput: \");\n      stack1 = helpers._triageMustache.call(depth0, \"output\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"\\n<p>\\n	Open the console and you will see endless debug messages\\n</p>\\n\");\n      stack1 = helpers._triageMustache.call(depth0, \"outlet\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"\\n\");\n      return buffer;\n      \n    });\n  });//# sourceURL=dummy/templates/application.js");
+    Router.map(function() {
+    });
 
-;eval("define(\"dummy/templates/components/code-snippet\", \n  [\"ember\",\"exports\"],\n  function(__dependency1__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    __exports__[\"default\"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {\n    this.compilerInfo = [4,\'>= 1.0.0\'];\n    helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};\n      var buffer = \'\', stack1;\n\n\n      stack1 = helpers._triageMustache.call(depth0, \"source\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"\\n\");\n      return buffer;\n      \n    });\n  });//# sourceURL=dummy/templates/components/code-snippet.js");
+    __exports__["default"] = Router;
+  });
+;define("dummy/templates/application", 
+  ["ember","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    __exports__["default"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+    this.compilerInfo = [4,'>= 1.0.0'];
+    helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+      var buffer = '', stack1, helper, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
 
-;eval("define(\"dummy/tests/app.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - .\');\n    test(\'app.js should pass jshint\', function() { \n      ok(true, \'app.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/app.jshint.js");
 
-;eval("define(\"dummy/tests/controllers/application.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - controllers\');\n    test(\'controllers/application.js should pass jshint\', function() { \n      ok(true, \'controllers/application.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/controllers/application.jshint.js");
+      data.buffer.push("<div class=\"github-fork-ribbon-wrapper right\">\n    <div class=\"github-fork-ribbon\">\n        <a href=\"https://github.com/ramybenaroya/ember-cli-log-observers-and-computed\">Fork me on GitHub</a>\n    </div>\n</div>\n<h1>Ember-cli-log-observers-and-computed Example</h1>\n");
+      data.buffer.push(escapeExpression((helper = helpers['code-snippet'] || (depth0 && depth0['code-snippet']),options={hash:{
+        'name': ("application.js")
+      },hashTypes:{'name': "STRING"},hashContexts:{'name': depth0},contexts:[],types:[],data:data},helper ? helper.call(depth0, options) : helperMissing.call(depth0, "code-snippet", options))));
+      data.buffer.push("\nOutput: ");
+      stack1 = helpers._triageMustache.call(depth0, "output", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("\n<p>\n	Open the console and you will see endless debug messages\n</p>\n<section>\n	Maintained by <a target=\"_blank\" href=\"https://github.com/ramybenaroya\">@ramybenaroya</a>\n</section\n");
+      stack1 = helpers._triageMustache.call(depth0, "outlet", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("\n");
+      return buffer;
+      
+    });
+  });
+;define("dummy/templates/components/code-snippet", 
+  ["ember","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    __exports__["default"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+    this.compilerInfo = [4,'>= 1.0.0'];
+    helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+      var buffer = '', stack1;
 
-;eval("define(\"dummy/tests/dummy/tests/helpers/resolver.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - dummy/tests/helpers\');\n    test(\'dummy/tests/helpers/resolver.js should pass jshint\', function() { \n      ok(true, \'dummy/tests/helpers/resolver.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/dummy/tests/helpers/resolver.jshint.js");
 
-;eval("define(\"dummy/tests/dummy/tests/helpers/start-app.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - dummy/tests/helpers\');\n    test(\'dummy/tests/helpers/start-app.js should pass jshint\', function() { \n      ok(true, \'dummy/tests/helpers/start-app.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/dummy/tests/helpers/start-app.jshint.js");
+      stack1 = helpers._triageMustache.call(depth0, "source", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("\n");
+      return buffer;
+      
+    });
+  });
+;define("dummy/tests/app.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - .');
+    test('app.js should pass jshint', function() { 
+      ok(true, 'app.js should pass jshint.'); 
+    });
+  });
+;define("dummy/tests/controllers/application.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - controllers');
+    test('controllers/application.js should pass jshint', function() { 
+      ok(true, 'controllers/application.js should pass jshint.'); 
+    });
+  });
+;define("dummy/tests/dummy/tests/helpers/resolver.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - dummy/tests/helpers');
+    test('dummy/tests/helpers/resolver.js should pass jshint', function() { 
+      ok(true, 'dummy/tests/helpers/resolver.js should pass jshint.'); 
+    });
+  });
+;define("dummy/tests/dummy/tests/helpers/start-app.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - dummy/tests/helpers');
+    test('dummy/tests/helpers/start-app.js should pass jshint', function() { 
+      ok(true, 'dummy/tests/helpers/start-app.js should pass jshint.'); 
+    });
+  });
+;define("dummy/tests/dummy/tests/test-helper.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - dummy/tests');
+    test('dummy/tests/test-helper.js should pass jshint', function() { 
+      ok(true, 'dummy/tests/test-helper.js should pass jshint.'); 
+    });
+  });
+;define("dummy/tests/helpers/resolver", 
+  ["ember/resolver","dummy/config/environment","exports"],
+  function(__dependency1__, __dependency2__, __exports__) {
+    "use strict";
+    var Resolver = __dependency1__["default"];
+    var config = __dependency2__["default"];
 
-;eval("define(\"dummy/tests/dummy/tests/test-helper.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - dummy/tests\');\n    test(\'dummy/tests/test-helper.js should pass jshint\', function() { \n      ok(true, \'dummy/tests/test-helper.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/dummy/tests/test-helper.jshint.js");
+    var resolver = Resolver.create();
 
-;eval("define(\"dummy/tests/helpers/resolver\", \n  [\"ember/resolver\",\"dummy/config/environment\",\"exports\"],\n  function(__dependency1__, __dependency2__, __exports__) {\n    \"use strict\";\n    var Resolver = __dependency1__[\"default\"];\n    var config = __dependency2__[\"default\"];\n\n    var resolver = Resolver.create();\n\n    resolver.namespace = {\n      modulePrefix: config.modulePrefix,\n      podModulePrefix: config.podModulePrefix\n    };\n\n    __exports__[\"default\"] = resolver;\n  });//# sourceURL=dummy/tests/helpers/resolver.js");
+    resolver.namespace = {
+      modulePrefix: config.modulePrefix,
+      podModulePrefix: config.podModulePrefix
+    };
 
-;eval("define(\"dummy/tests/helpers/start-app\", \n  [\"ember\",\"dummy/app\",\"dummy/router\",\"dummy/config/environment\",\"exports\"],\n  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    var Application = __dependency2__[\"default\"];\n    var Router = __dependency3__[\"default\"];\n    var config = __dependency4__[\"default\"];\n\n    __exports__[\"default\"] = function startApp(attrs) {\n      var App;\n\n      var attributes = Ember.merge({}, config.APP);\n      attributes = Ember.merge(attributes, attrs); // use defaults, but you can override;\n\n      Router.reopen({\n        location: \'none\'\n      });\n\n      Ember.run(function() {\n        App = Application.create(attributes);\n        App.setupForTesting();\n        App.injectTestHelpers();\n      });\n\n      App.reset(); // this shouldn\'t be needed, i want to be able to \"start an app at a specific URL\"\n\n      return App;\n    }\n  });//# sourceURL=dummy/tests/helpers/start-app.js");
+    __exports__["default"] = resolver;
+  });
+;define("dummy/tests/helpers/start-app", 
+  ["ember","dummy/app","dummy/router","dummy/config/environment","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    var Application = __dependency2__["default"];
+    var Router = __dependency3__["default"];
+    var config = __dependency4__["default"];
 
-;eval("define(\"dummy/tests/router.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - .\');\n    test(\'router.js should pass jshint\', function() { \n      ok(true, \'router.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/router.jshint.js");
+    __exports__["default"] = function startApp(attrs) {
+      var App;
 
-;eval("define(\"dummy/tests/test-helper\", \n  [\"dummy/tests/helpers/resolver\",\"ember-qunit\"],\n  function(__dependency1__, __dependency2__) {\n    \"use strict\";\n    var resolver = __dependency1__[\"default\"];\n    var setResolver = __dependency2__.setResolver;\n\n    setResolver(resolver);\n\n    document.write(\'<div id=\"ember-testing-container\"><div id=\"ember-testing\"></div></div>\');\n\n    QUnit.config.urlConfig.push({ id: \'nocontainer\', label: \'Hide container\'});\n    var containerVisibility = QUnit.urlParams.nocontainer ? \'hidden\' : \'visible\';\n    document.getElementById(\'ember-testing-container\').style.visibility = containerVisibility;\n  });//# sourceURL=dummy/tests/test-helper.js");
+      var attributes = Ember.merge({}, config.APP);
+      attributes = Ember.merge(attributes, attrs); // use defaults, but you can override;
 
+      Router.reopen({
+        location: 'none'
+      });
+
+      Ember.run(function() {
+        App = Application.create(attributes);
+        App.setupForTesting();
+        App.injectTestHelpers();
+      });
+
+      App.reset(); // this shouldn't be needed, i want to be able to "start an app at a specific URL"
+
+      return App;
+    }
+  });
+;define("dummy/tests/router.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - .');
+    test('router.js should pass jshint', function() { 
+      ok(true, 'router.js should pass jshint.'); 
+    });
+  });
+;define("dummy/tests/test-helper", 
+  ["dummy/tests/helpers/resolver","ember-qunit"],
+  function(__dependency1__, __dependency2__) {
+    "use strict";
+    var resolver = __dependency1__["default"];
+    var setResolver = __dependency2__.setResolver;
+
+    setResolver(resolver);
+
+    document.write('<div id="ember-testing-container"><div id="ember-testing"></div></div>');
+
+    QUnit.config.urlConfig.push({ id: 'nocontainer', label: 'Hide container'});
+    var containerVisibility = QUnit.urlParams.nocontainer ? 'hidden' : 'visible';
+    document.getElementById('ember-testing-container').style.visibility = containerVisibility;
+  });
 /* jshint ignore:start */
 
 define('dummy/config/environment', ['ember'], function(Ember) {

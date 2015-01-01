@@ -84245,6 +84245,122 @@ define("ember-inflector/system/string",
   });
  global.DS = requireModule('ember-data')['default'];
  })(this);
-;eval("define(\"ember-cli-log-observers-and-computed/utils\", \n  [\"exports\"],\n  function(__exports__) {\n    \"use strict\";\n    __exports__.applyAOP = applyAOP;\n    __exports__.getCleanStackTrace = getCleanStackTrace;\n    __exports__.getStackTrace = getStackTrace;\n\n    function applyAOP(targetFunction, doBefore) {\n        return function() {\n            var length = arguments.length;\n            var args = new Array(length);\n            for (var x = 0; x < length; x++) {\n                args[x] = arguments[x];\n            }\n            var self = this;\n            var stackTrace = getStackTrace();\n            var func = function() {\n                doBefore.call(null, stackTrace);\n                var length = arguments.length;\n                var args = new Array(length);\n                for (var x = 0; x < length; x++) {\n                    args[x] = arguments[x];\n                }\n                return self.apply(this, args);\n            };\n            return targetFunction.apply(func, args);\n        };\n    }\n\n    function getCleanStackTrace() {\n        var s = getStackTrace().stack,\n            clean;\n        // remove call to this function\n        s.shift();\n        // return clean\n        return s.map(function(str) {\n            clean = (str || \"\").trim().split(\"(\")[0].split(\"?\")[0].replace(\"at\", \"\").split(\"http\")[0].trim();\n            return clean || \"anonymous\";\n        });\n    }\n\n    function getStackTrace() {\n        var callstack = [];\n        var isCallstackPopulated = false;\n        var lines, i, len, currentFunction, fn, fname;\n        try {\n            i.dont.exist += 0; //doesn\'t exist- that\'s the point\n        } catch (e) {\n            if (e.stack) { //Firefox\n                lines = e.stack.split(\'\\n\');\n                for (i = 0, len = lines.length; i < len; i++) {\n                    //if (lines[i].match(/^\\s*[A-Za-z0-9\\-_\\$]+\\(/)) {\n                    callstack.push(lines[i]);\n                    // }\n                }\n                if (callstack[0] && /^Type/.test(callstack[0])) {\n                    callstack.shift();\n                }\n                callstack.shift();\n                isCallstackPopulated = true;\n            } else if (window.opera && e.message) { //Opera\n                lines = e.message.split(\'\\n\');\n                for (i = 0, len = lines.length; i < len; i++) {\n                    var entry = lines[i];\n                    if (lines[i + 1]) {\n                        entry += \' at \' + lines[i + 1];\n                        i++;\n                    }\n                    callstack.push(entry);\n                }\n                if (callstack[0] && /^Type/.test(callstack[0])) {\n                    callstack.shift();\n                }\n                callstack.shift();\n                isCallstackPopulated = true;\n            }\n        }\n        if (!isCallstackPopulated) { //IE and Safari\n            /* jshint ignore:start */\n            currentFunction = arguments.callee.caller;\n            /* jshint ignore:end */\n            while (currentFunction) {\n                fn = currentFunction.toString();\n                fname = fn.substring(fn.indexOf(\'function\') + 8, fn.indexOf(\'\')) || \'anonymous\';\n                callstack.push(fname);\n                currentFunction = currentFunction.caller;\n            }\n        }\n        return {\n            stack: callstack,\n            str: callstack.join(\'\\n\\nStack Trace:\\n\')\n        };\n    }\n  });//# sourceURL=ember-cli-log-observers-and-computed/utils.js");
+;define("ember-cli-log-observers-and-computed/utils", 
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    __exports__.applyAOP = applyAOP;
+    __exports__.formatArgs = formatArgs;
+    __exports__.getCleanStackTrace = getCleanStackTrace;
+    __exports__.getStackTrace = getStackTrace;
 
-;eval("define(\"ember-cli-log-observers-and-computed\", [\"ember-cli-log-observers-and-computed/index\",\"exports\"], function(__index__, __exports__) {\n  \"use strict\";\n  Object.keys(__index__).forEach(function(key){\n    __exports__[key] = __index__[key];\n  });\n});\n//# sourceURL=__reexport.js");
+    function applyAOP(targetFunction, doBefore) {
+        return function() {
+            var length = arguments.length;
+            var args = new Array(length);
+            for (var x = 0; x < length; x++) {
+                args[x] = arguments[x];
+            }
+            var self = this;
+            var stackTrace = getStackTrace();
+            var func = function() {
+                doBefore.call(null, stackTrace, args);
+                var length = arguments.length;
+                var funcArgs = new Array(length);
+                for (var x = 0; x < length; x++) {
+                    funcArgs[x] = arguments[x];
+                }
+                return self.apply(this, funcArgs);
+            };
+            return targetFunction.apply(func, args);
+        };
+    }
+
+    function formatArgs(prefix, args) {
+        var ret = '',
+            quotedArgs = args.map(function(arg) {
+                return '"' + arg + '"';
+            }),
+            length = quotedArgs.length;
+        if (quotedArgs.length === 1) {
+            ret = prefix + quotedArgs[0];
+        } else if (length === 2) {
+            ret += prefix + quotedArgs[0] + ' and ' + quotedArgs[1];
+        } else if (length > 2) {
+            ret = quotedArgs.slice(0, length - 2).join(', ');
+            ret = prefix + ret.trim() + ', ' + quotedArgs[length - 2] + ' and ' + quotedArgs[length - 1];
+        }
+        return ret;
+    }
+
+    function getCleanStackTrace() {
+        var s = getStackTrace().stack,
+            clean;
+        // remove call to this function
+        s.shift();
+        // return clean
+        return s.map(function(str) {
+            clean = (str || "").trim().split("(")[0].split("?")[0].replace("at", "").split("http")[0].trim();
+            return clean || "anonymous";
+        });
+    }
+
+    function getStackTrace() {
+        var callstack = [];
+        var isCallstackPopulated = false;
+        var lines, i, len, currentFunction, fn, fname;
+        try {
+            i.dont.exist += 0; //doesn't exist- that's the point
+        } catch (e) {
+            if (e.stack) { //Firefox
+                lines = e.stack.split('\n');
+                for (i = 0, len = lines.length; i < len; i++) {
+                    //if (lines[i].match(/^\s*[A-Za-z0-9\-_\$]+\(/)) {
+                    callstack.push(lines[i]);
+                    // }
+                }
+                if (callstack[0] && /^Type/.test(callstack[0])) {
+                    callstack.shift();
+                }
+                callstack.shift();
+                isCallstackPopulated = true;
+            } else if (window.opera && e.message) { //Opera
+                lines = e.message.split('\n');
+                for (i = 0, len = lines.length; i < len; i++) {
+                    var entry = lines[i];
+                    if (lines[i + 1]) {
+                        entry += ' at ' + lines[i + 1];
+                        i++;
+                    }
+                    callstack.push(entry);
+                }
+                if (callstack[0] && /^Type/.test(callstack[0])) {
+                    callstack.shift();
+                }
+                callstack.shift();
+                isCallstackPopulated = true;
+            }
+        }
+        if (!isCallstackPopulated) { //IE and Safari
+            /* jshint ignore:start */
+            currentFunction = arguments.callee.caller;
+            /* jshint ignore:end */
+            while (currentFunction) {
+                fn = currentFunction.toString();
+                fname = fn.substring(fn.indexOf('function') + 8, fn.indexOf('')) || 'anonymous';
+                callstack.push(fname);
+                currentFunction = currentFunction.caller;
+            }
+        }
+        return {
+            stack: callstack,
+            str: callstack.join('\n\nStack Trace:\n')
+        };
+    }
+  });
+;define("ember-cli-log-observers-and-computed", ["ember-cli-log-observers-and-computed/index","exports"], function(__index__, __exports__) {
+  "use strict";
+  Object.keys(__index__).forEach(function(key){
+    __exports__[key] = __index__[key];
+  });
+});
